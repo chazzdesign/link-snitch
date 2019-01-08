@@ -1,0 +1,30 @@
+{
+  "name": "hello-express",
+  "version": "0.0.1",
+  "description": "A simple Node app built on Express, instantly up and running.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "tinyspeck": "^1.4.2",
+    "get-urls": "^8.0.0",
+    "isomorphic-fetch": "^2.2.1",
+    "@slack/client": "^4.8.0",
+    "url-metadata": "^2.1.7",
+    "airtable": "^0.5.8"
+  },
+  "engines": {
+    "node": "8.x"
+  },
+  "repository": {
+    "url": "https://glitch.com/edit/#!/hello-express"
+  },
+  "license": "MIT",
+  "keywords": [
+    "node",
+    "glitch",
+    "express"
+  ]
+}
