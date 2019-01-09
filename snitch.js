@@ -1,19 +1,23 @@
+require('isomorphic-fetch')
+
 const getUrls = require('get-urls')
 const Airtable = require('airtable')
 
 const PUBLISH_MESSAGE_ON_LINK = false
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY
-
-require('isomorphic-fetch')
+const AIRTABLE_ENDPOINT = process.env.AIRTABLE_ENDPOINT
+const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID
+const AIRTABLE_BASE = process.env.AIRTABLE_BASE_NAME
+const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN
 
 function createSnitch (slack) {
 
   Airtable.configure({
-    endpointUrl: 'https://api.airtable.com',
-    apiKey: process.env.API_KEY
+    endpointUrl: AIRTABLE_ENDPOINT,
+    apiKey: AIRTABLE_API_KEY
   })
 
-  let base = new Airtable({ AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID)
+  let base = new Airtable({ AIRTABLE_API_KEY }).base(AIRTABLE_BASE_ID)
 
   const showError = (error) => {
     console.error(error)
@@ -23,7 +27,7 @@ function createSnitch (slack) {
     let found = false
 
     return new Promise((resolve, reject) => {
-      base(process.env.AIRTABLE_BASE).select({
+      base(AIRTABLE_BASE).select({
         maxRecords: 5,
         sort: [{field: "date", direction: "desc"}]
       }).firstPage(function(err, records) {
@@ -43,7 +47,7 @@ function createSnitch (slack) {
     })
   }
 
-  const addLinkToTable = (event, text, urls, slackChannel, user) => {
+  const storeURLs = (event, text, urls, slackChannel, user) => {
     let channel = slackChannel.name
     let username = user.name
     let channelID = slackChannel.id
@@ -67,23 +71,24 @@ function createSnitch (slack) {
       tags.forEach((tag) => {
         let r = new RegExp(`<(.*?)>`, 'gi')
         description = description.replace(r, '')
-      })
+      })  
     }
-
-    createLink(date, tags, username, description, slackChannel, URL)
+    
+    storeURL(date, tags, username, description, channel, URL)
   }
 
-  const createLink = (date, tags, username, description, channel, URL, other_tags = null) => {
+  const storeURL = (date, tags, username, description, channel, URL, other_tags = null) => {
+
 
     const onLinkAdded = (err, record) => {
       if (err) { 
         console.error(err) 
 
         if (err.error === 'INVALID_VALUE_FOR_COLUMN') {
-          createLink(date, null, username, description, channel.name, URL, tags.join(' '))
+          storeURL(date, null, username, description, channel, URL, tags.join(' '))
         }
         if (err.error === 'INVALID_MULTIPLE_CHOICE_OPTIONS') {
-          createLink(date, null, username, description, channel.name, URL, tags.join(' '))
+          storeURL(date, null, username, description, channel, URL, tags.join(' '))
         }
 
         return
@@ -92,7 +97,7 @@ function createSnitch (slack) {
 
     isDuplicated(URL).then((duplicated) => {
       if (!duplicated) {
-        base(process.env.AIRTABLE_BASE).create({ date, tags, username, description, channel, URL, other_tags }, onLinkAdded)
+        base(AIRTABLE_BASE).create({ date, tags: tags, username, description, channel, URL, other_tags }, onLinkAdded)
       }
     })
   }
@@ -101,7 +106,7 @@ function createSnitch (slack) {
     return {
       unfurl_links: true,
       channel: channelID,
-      token: process.env.BOT_TOKEN,
+      token: SLACK_BOT_TOKEN,
       text: message || ':)'
     }
   }
@@ -126,7 +131,10 @@ function createSnitch (slack) {
 
   const recordMessage = (event, channel, user, text) => {
     let urls = extractURLs(text)
-    addLinkToTable(event, text, urls, channel, user)
+    
+    if (urls && urls.length > 0) {
+      storeURLs(event, text, urls, channel, user)
+    }
   }
 
   const extractTags = (text) => {
@@ -153,9 +161,6 @@ function createSnitch (slack) {
   }
 
   return {
-    createLink,
-    extractURLs,
-    showError,
     recordMessage
   }
 }

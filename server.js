@@ -3,10 +3,10 @@
 const express = require('express')
 const tinyspeck = require('tinyspeck')
 const { WebClient } = require('@slack/client')
-const web = new WebClient(process.env.BOT_TOKEN)
+const web = new WebClient(process.env.SLACK_BOT_TOKEN)
 
 const slack = tinyspeck.instance({
-  token: process.env.BOT_TOKEN
+  token: process.env.SLACK_BOT_TOKEN
 })
 
 const Snitch = require('./snitch')(slack)
@@ -43,4 +43,4 @@ const getUserFromUserID = (id) => {
 }
 
 slack.on('message', onMessage)
-slack.listen(process.env.PORT, process.env.VERIFICATION_TOKEN)
+slack.listen(process.env.PORT, process.env.SLACK_VERIFICATION_TOKEN)
