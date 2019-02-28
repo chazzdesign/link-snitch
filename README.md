@@ -8,7 +8,7 @@ Store the URLs shared in Slack in an Airtable base.
 The installation process requires you to: 
 
 1. Create a glitch project (although you can use any server or platform you want).
-2. Create a bot in Slack and copy the tokens/credentails.
+2. Create a bot in Slack and copy the tokens/credentials.
 3. Create a base in Airtable and copy the tokens/credentials.
 4. Invite the bot to the Slack channels you want to monitor.
 
@@ -22,12 +22,12 @@ The installation process requires you to:
 4. Open the project options and click on "Advanced options".
 5. Grant access to your GitHub account.
 6. Click on "Import from GitHub".
-7. In the prompt window write the path to the repo in github: `username/link-snitch`.
+7. In the prompt window write the path to the repo in GitHub: `username/link-snitch`.
 8. Using the glitch browser to copy the contents of the `env.sample` file and use it to replace the contents of the secret `.env` file.
 
 #### Creating a bot in Slack
 
-*In this step you'll create and setup a bot that will look for links in the messages of the Slack channels you invite it in.*
+*In this step you'll create and set up a bot that will look for links in the messages of the Slack channels you invite it in.*
 
 1. Go to [api.slack.com](https://api.slack.com).
 2. Click on `Create New App`.
@@ -46,7 +46,7 @@ The installation process requires you to:
 
 #### Creating a base in Airtable
 
-*In this step you'll create and setup an Airtable base to collect all the links*
+*In this step you'll create and set up an Airtable base to collect all the links*
 
 1. Go to [Airtable](https://airtable.com) and create a new base using `Import a spreadsheet`
 2. Pick the option to create the table using a CSV file and use the [aritable.csv](airtable.csv) file in this repo
@@ -55,10 +55,10 @@ The installation process requires you to:
 
 #### Inviting the bot to the Slack channels
 
-Once you've finished the setup of the bot, enter in any channel and invite the bot using the following command:
+Once you've finished the set up of the bot, open any channel and invite the bot using the following command:
 
 `/invite @name-of-your-bot`
 
-To test that everything it's working fine, write a link in the channel and see if it was inserted in Airtable.
+To test that everything is working fine, write a link in the channel and see if it was inserted in Airtable.
 
 
