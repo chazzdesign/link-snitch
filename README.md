@@ -7,10 +7,10 @@ Store the URLs shared in Slack in an Airtable base.
 
 The installation process requires you to: 
 
-1. Create a glitch project.
+1. Create a glitch project (although you can use any server or platform you want).
 2. Create a bot in Slack and copy the tokens/credentails.
 3. Create a base in Airtable and copy the tokens/credentials.
-4. Invite the bot to the Slach channels you want to monitor.
+4. Invite the bot to the Slack channels you want to monitor.
 
 ### Creating a Glitch project
 
